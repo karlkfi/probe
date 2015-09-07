@@ -47,6 +47,27 @@ probe -t 1s https://example.com/
 The error description will be printed to STDERR.
 
 
+### Building
+
+Build locally:
+
+```
+make
+```
+
+Build in docker:
+
+```
+make build-docker
+```
+
+Build docker builder:
+
+```
+make builder
+```
+
+
 ### TODO
 
 1. Add SSL certificate validation options (currently ignores cert validity).
