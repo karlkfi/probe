@@ -47,6 +47,17 @@ probe -t 1s https://example.com/
 The error description will be printed to STDERR.
 
 
+### Installing
+
+Install the lastest version:
+
+```
+go get github.com/karlkfi/probe
+```
+
+(Requires [Go (Golang)](https://golang.org/doc/install).)
+
+
 ### Building
 
 Build locally:
@@ -55,17 +66,23 @@ Build locally:
 make
 ```
 
+(Requires [Go (Golang)](https://golang.org/doc/install) and [Make](https://www.gnu.org/software/make/).)
+
 Build in docker:
 
 ```
 make build-docker
 ```
 
+(Requires [Docker](https://docs.docker.com/installation/).)
+
 Build docker builder:
 
 ```
 make builder
 ```
+
+(Requires [Docker](https://docs.docker.com/installation/).)
 
 
 ### TODO
