@@ -1,12 +1,12 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"net/url"
 	"os"
 	"path"
 	"strings"
-	"flag"
 
 	"github.com/golang/glog"
 
@@ -23,7 +23,7 @@ const (
 )
 
 var (
-	flagTimeout = flag.Duration("timeout", -1, "Timeout duration. "+validTimeUnits)
+	flagTimeout         = flag.Duration("timeout", -1, "Timeout duration. "+validTimeUnits)
 	flagTimeoutShortcut = flag.Duration("t", -1, "Shortcut for --timeout")
 )
 
@@ -70,7 +70,7 @@ func main() {
 	var prober Prober
 	var address string
 
-	switch (addrURL.Scheme) {
+	switch addrURL.Scheme {
 	case SchemeTCP:
 		dialer := tcp.NewDialer()
 

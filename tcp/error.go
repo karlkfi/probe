@@ -6,10 +6,10 @@ import (
 
 // probeError satisfies the errors.ProbeError interface.
 type probeError struct {
-	address    string
-	timeout    bool
-	message    string
-	cause      error
+	address string
+	timeout bool
+	message string
+	cause   error
 }
 
 func (pe *probeError) Address() string {

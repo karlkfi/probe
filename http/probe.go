@@ -2,9 +2,9 @@ package http
 
 import (
 	"io/ioutil"
+	"net"
 	"net/http"
 	"net/url"
-	"net"
 
 	"github.com/golang/glog"
 
