@@ -1,25 +1,15 @@
 package http
 
-import (
-	"net/http"
-	"net/url"
-	"time"
-)
-
-type Prober interface {
-	Probe(url *url.URL) error
-}
-
 type prober struct {
-	client *http.Client
+	getter Getter
 }
 
-func NewProber(client *http.Client) Prober {
+func NewProber(getter Getter) *prober {
 	return &prober{
-		client: client,
+		getter: getter,
 	}
 }
 
-func (pr *prober) Probe(url *url.URL) error {
-	return Probe(url, pr.client)
+func (pr *prober) Probe(address string) error {
+	return Probe(address, pr.getter)
 }

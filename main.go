@@ -11,13 +11,20 @@ import (
 	"github.com/golang/glog"
 
 	"github.com/karlkfi/probe/http"
+	"github.com/karlkfi/probe/tcp"
 )
 
-const validTimeUnits = "Valid time units are \"ns\", \"us\" (or \"µs\"), \"ms\", \"s\", \"m\", \"h\"."
+const (
+	validTimeUnits = "Valid time units are \"ns\", \"us\" (or \"µs\"), \"ms\", \"s\", \"m\", \"h\"."
+
+	SchemeHTTP  = "http"
+	SchemeHTTPS = "https"
+	SchemeTCP   = "tcp"
+)
 
 var (
-	flagHTTP    = flag.Bool("http", false, "Use HTTP probing")
 	flagTimeout = flag.Duration("timeout", -1, "Timeout duration. "+validTimeUnits)
+	flagTimeoutShortcut = flag.Duration("t", -1, "Shortcut for --timeout")
 )
 
 func usage() {
@@ -31,12 +38,6 @@ func main() {
 
 	defer glog.Flush()
 	glog.V(1).Info("Executing: ", strings.Join(os.Args, " "))
-
-	if !*flagHTTP {
-		fmt.Fprint(os.Stderr, "Error: No probe type specified - Expected \"--http\"\n")
-		flag.Usage()
-		os.Exit(2)
-	}
 
 	// non-flag args
 	args := flag.Args()
@@ -52,25 +53,59 @@ func main() {
 		os.Exit(2)
 	}
 
-	address := args[0]
+	addrArg := args[0]
 
-	addrURL, err := url.ParseRequestURI(address)
+	addrURL, err := url.ParseRequestURI(addrArg)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error: Invalid address %q - Expected valid URL\n", address)
+		fmt.Fprintf(os.Stderr, "Error: Invalid address %q - Expected valid URL\n", addrArg)
 		os.Exit(2)
 	}
 
-	client := http.NewInsecureClient()
-
-	if *flagTimeout >= 0 {
-		client.Timeout = *flagTimeout
+	if *flagTimeout >= 0 && *flagTimeoutShortcut >= 0 {
+		fmt.Fprint(os.Stderr, "Error: Both \"--timeout\" and its shortcut \"-t\" specified - Expected at most one\n")
+		flag.Usage()
+		os.Exit(2)
 	}
 
-	prober := http.NewProber(client)
+	var prober Prober
+	var address string
 
-	probeErr := prober.Probe(addrURL)
+	switch (addrURL.Scheme) {
+	case SchemeTCP:
+		dialer := tcp.NewDialer()
+
+		if *flagTimeout >= 0 {
+			dialer.Timeout = *flagTimeout
+		} else if *flagTimeoutShortcut >= 0 {
+			dialer.Timeout = *flagTimeout
+		}
+
+		prober = tcp.NewProber(dialer)
+		address = addrURL.Host
+	case SchemeHTTP:
+		fallthrough
+	case SchemeHTTPS:
+		client := http.NewInsecureClient()
+
+		if *flagTimeout >= 0 {
+			client.Timeout = *flagTimeout
+		} else if *flagTimeoutShortcut >= 0 {
+			client.Timeout = *flagTimeout
+		}
+
+		prober = http.NewProber(client)
+		address = addrURL.String()
+	default:
+		fmt.Fprint(os.Stderr, "Error: No probable address scheme specified - Expected \"tcp\", \"http\", or \"https\"\n")
+		flag.Usage()
+		os.Exit(2)
+	}
+
+	probeErr := prober.Probe(address)
 	if probeErr != nil {
 		fmt.Fprintf(os.Stderr, "Error: %s\n", probeErr.Error())
 		os.Exit(1)
 	}
+
+	os.Exit(0)
 }

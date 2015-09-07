@@ -1,20 +1,59 @@
 # Probe
 
-Probe is a command line tool for service interrogation.
+Probe is a command line tool that does one thing:
+interrogates a service to determine if it is alive/ready.
 
-### Exampe Usage
+Whether the probe result corresponds to aliveness or readiness depends on how the service handles connections and/or requests on the specified address.
 
-HTTP probing:
+
+### Probe Schemes
+
+Probe supports three schemes of probing: tcp, http, &amp; https.
+
+TCP probing simply opens a connection to the supplied address and port and then closes it.
+
+HTTP probing opens a connection to the supplied address, port, and path, makes an HTTP GET request, reads the response, and closes the connection.
+
+HTTPS probing acts like HTTP probing, except with TLS/SSL certification.
+
+
+### Example Usage
+
+TCP probing:
 
 ```
-probe --http http://example.com/
+probe tcp://example.com:80
 ```
 
 HTTP probing, with timeout:
 
 ```
-probe --http --timeout 1s http://example.com/
+probe --timeout 5s http://example.com/
 ```
+
+HTTPS probing, with timeout shortcut:
+
+```
+probe -t 1s https://example.com/
+```
+
+
+### Exit Codes
+
+- `0` - Success
+- `1` - Runtime Error
+- `2` - Input Validation Error
+
+The error description will be printed to STDERR.
+
+
+### TODO
+
+1. Add SSL certificate validation options (currently ignores cert validity).
+2. Detect timeouts better
+  - `request canceled while waiting for connection`
+  - `read tcp 93.184.216.34:443: use of closed network connection` (https://example.com/)
+
 
 ### License
 
