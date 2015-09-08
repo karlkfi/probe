@@ -62,7 +62,7 @@ go get github.com/karlkfi/probe
 
 #### With Homebrew
 
-[Homebrew formula](https://github.com/karlkfi/homebrew/tree/probe) available on a branch, pending upstreaming.
+[Homebrew formula](https://raw.githubusercontent.com/karlkfi/homebrew/probe/Library/Formula/probe.rb) available on [a branch](https://github.com/karlkfi/homebrew/tree/probe), pending upstreaming.
 
 ```
 wget https://raw.githubusercontent.com/karlkfi/homebrew/probe/Library/Formula/probe.rb \
