@@ -47,9 +47,11 @@ probe -t 1s https://example.com/
 The error description will be printed to STDERR.
 
 
-### Installing
+### Install
 
-Install the lastest version:
+#### From Source
+
+Install the bleeding edge revision (HEAD):
 
 ```
 go get github.com/karlkfi/probe
@@ -58,7 +60,20 @@ go get github.com/karlkfi/probe
 (Requires [Go (Golang)](https://golang.org/doc/install).)
 
 
-### Building
+#### With Homebrew
+
+[Homebrew formula](https://github.com/karlkfi/homebrew/tree/probe) available on a branch, pending upstreaming.
+
+```
+wget https://raw.githubusercontent.com/karlkfi/homebrew/probe/Library/Formula/probe.rb \
+  -O /usr/local/Library/Formula/probe.rb
+brew install probe
+```
+
+(Requires [Homebrew](http://brew.sh/) and [wget](http://www.gnu.org/software/wget/) (`brew install wget`).)
+
+
+### Build
 
 Build locally:
 
@@ -91,7 +106,7 @@ make builder
 2. Detect timeouts better
   - `request canceled while waiting for connection`
   - `read tcp 93.184.216.34:443: use of closed network connection` (https://example.com/)
-
+3. Cross-platform pre-compiled binaries
 
 ### License
 
