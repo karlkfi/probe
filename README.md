@@ -100,13 +100,23 @@ make builder
 (Requires [Docker](https://docs.docker.com/installation/).)
 
 
+### DNS Resolution
+
+Probe uses Go's DNS resolver, which can be configured by environment variable to force Go-based or C-based resolution.
+
+See http://golang.org/pkg/net/#hdr-Name_Resolution for more details.
+
+If the Go-based resolver is used, there is no built-in DNS caching, which may or may not be desirable.
+
+
 ### TODO
 
 1. Add SSL certificate validation options (currently ignores cert validity).
 2. Detect timeouts better
   - `request canceled while waiting for connection`
   - `read tcp 93.184.216.34:443: use of closed network connection` (https://example.com/)
-3. Cross-platform pre-compiled binaries
+3. Upload cross-platform pre-compiled binaries
+4. Add configurable DNS caching
 
 ### License
 
