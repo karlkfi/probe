@@ -44,12 +44,22 @@ func main() {
 	}
 
 	if *c.maxAttempts == 0 {
-		fmt.Fprintf(os.Stderr, "Error: Invalid attempts %q - Expected an int > 0 or exactly -1 (unlimited)\n", addrArg)
+		fmt.Fprintf(os.Stderr, "Error: Invalid max-attempts %q - Expected an int > 0 or exactly -1 (unlimited)\n", addrArg)
 		os.Exit(2)
 	}
 
 	if *c.retryDelay < 0 {
-		fmt.Fprintf(os.Stderr, "Error: Invalid delay %q - Expected a duration >= 0\n", addrArg)
+		fmt.Fprintf(os.Stderr, "Error: Invalid retry-delay %q - Expected a duration >= 0\n", addrArg)
+		os.Exit(2)
+	}
+
+	if *c.timeout == 0 {
+		fmt.Fprintf(os.Stderr, "Error: Invalid timeout %q - Expected an duration > 0 or exactly -1 (unlimited)\n", addrArg)
+		os.Exit(2)
+	}
+
+	if *c.attemptTimeout == 0 {
+		fmt.Fprintf(os.Stderr, "Error: Invalid attempt-timeout %q - Expected an duration > 0 or exactly -1 (unlimited)\n", addrArg)
 		os.Exit(2)
 	}
 
@@ -60,8 +70,8 @@ func main() {
 	case SchemeTCP:
 		dialer := tcp.NewDialer()
 
-		if *c.timeout >= 0 {
-			dialer.Timeout = *c.timeout
+		if *c.attemptTimeout > 0 {
+			dialer.Timeout = *c.attemptTimeout
 		}
 
 		prober = tcp.NewProber(dialer)
@@ -71,8 +81,8 @@ func main() {
 	case SchemeHTTPS:
 		client := http.NewInsecureClient()
 
-		if *c.timeout >= 0 {
-			client.Timeout = *c.timeout
+		if *c.attemptTimeout > 0 {
+			client.Timeout = *c.attemptTimeout
 		}
 
 		prober = http.NewProber(client)
@@ -83,7 +93,26 @@ func main() {
 		os.Exit(2)
 	}
 
+	var exitTimer *time.Timer
+	if *c.timeout >= 0 {
+		exitTimer = time.NewTimer(*c.timeout)
+		go func() {
+			_, ok := <-exitTimer.C
+			if ok {
+				// channel still open means timeout occurred
+				fmt.Fprintf(os.Stderr, "Error: Timed out after %v\n", *c.timeout)
+				// main goroutine will be killed by timeout exit.
+				// http client & dialer don't seem to be interruptable, or we might do that instead.
+				os.Exit(1)
+			}
+			// otherwise timer was stopped
+		}()
+	}
+
 	err = makeAttempts(prober, address, *c.maxAttempts, *c.retryDelay)
+	if exitTimer != nil {
+		exitTimer.Stop()
+	}
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(1)
