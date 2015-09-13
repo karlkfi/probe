@@ -17,9 +17,9 @@ const (
 )
 
 type config struct {
-	timeout  *time.Duration
-	maxAttempts *int
-	retryDelay *time.Duration
+	timeout        *time.Duration
+	maxAttempts    *int
+	retryDelay     *time.Duration
 	attemptTimeout *time.Duration
 }
 
