@@ -98,53 +98,44 @@ If the Go-based resolver is used, there is no built-in DNS caching, which may or
 
 #### From Source
 
-Install the bleeding edge revision (HEAD):
+[Go get](https://golang.org/doc/install) can be used to install the bleeding edge revision (HEAD):
 
 ```
 go get github.com/karlkfi/probe
 ```
 
-(Requires [Go (Golang)](https://golang.org/doc/install).)
-
 
 #### With Homebrew
 
-[Homebrew formula](https://raw.githubusercontent.com/karlkfi/homebrew/probe/Library/Formula/probe.rb) available on [a branch](https://github.com/karlkfi/homebrew/tree/probe), pending upstreaming.
+[Homebrew](http://brew.sh/) can be used to install the latest released version using [a formula](https://raw.githubusercontent.com/karlkfi/homebrew-terminal/master/probe.rb) from the [karlkfi/homebrew-terminal](https://github.com/karlkfi/homebrew-terminal) tap:
 
 ```
-wget https://raw.githubusercontent.com/karlkfi/homebrew/probe/Library/Formula/probe.rb \
-  -O /usr/local/Library/Formula/probe.rb
+brew tap karlkfi/homebrew-terminal
 brew install probe
 ```
-
-(Requires [Homebrew](http://brew.sh/) and [wget](http://www.gnu.org/software/wget/) (`brew install wget`).)
 
 
 ### Build
 
-Build locally:
+After checking out the Git repo, Probe can be compiled with [Make](https://www.gnu.org/software/make/).
+
+Build locally (Requires [Go (Golang)](https://golang.org/doc/install)):
 
 ```
 make
 ```
 
-(Requires [Go (Golang)](https://golang.org/doc/install) and [Make](https://www.gnu.org/software/make/).)
-
-Build in docker:
+Build the linux binary in docker (Requires [Docker](https://docs.docker.com/installation/)):
 
 ```
 make build-docker
 ```
 
-(Requires [Docker](https://docs.docker.com/installation/).)
-
-Build docker builder:
+Build the docker builder (Requires [Docker](https://docs.docker.com/installation/)):
 
 ```
 make builder
 ```
-
-(Requires [Docker](https://docs.docker.com/installation/).)
 
 
 ### TODO
