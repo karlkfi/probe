@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"path"
+	"path/filepath"
 	"time"
 )
 
@@ -43,7 +43,7 @@ func (c *config) addflags(s *flag.FlagSet) {
 
 func usage(s *flag.FlagSet) func() {
 	return func() {
-		fmt.Fprintf(os.Stderr, "Usage: %s [flags] <address>\n", path.Base(os.Args[0]))
+		fmt.Fprintf(os.Stderr, "Usage: %s [flags] <address>\n", filepath.Base(os.Args[0]))
 		s.PrintDefaults()
 	}
 }
