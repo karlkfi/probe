@@ -131,6 +131,12 @@ Build the linux binary in docker (Requires [Docker](https://docs.docker.com/inst
 make build-docker
 ```
 
+Build the Linux and Mac binaries in docker (Requires [Docker](https://docs.docker.com/installation/)):
+
+```
+make build-docker-cross
+```
+
 Build the docker builder (Requires [Docker](https://docs.docker.com/installation/)):
 
 ```
@@ -141,8 +147,7 @@ make builder
 ### TODO
 
 1. Add SSL certificate validation options (currently ignores cert validity).
-2. Upload cross-platform pre-compiled binaries
-3. Add configurable DNS caching
+2. Add configurable DNS caching
 
 ### License
 

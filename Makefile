@@ -35,6 +35,10 @@ build:
 	@echo "--> Building probe"
 	@godep go build -o probe
 
+build-cross:
+	@echo "--> Building probe"
+	gox -osarch="darwin/amd64" -osarch="linux/amd64" -output "pkg/{{.OS}}_{{.Arch}}/{{.Dir}}"
+
 test_banner:
 	@echo "--> Testing probe"
 
@@ -62,3 +66,7 @@ builder:
 build-docker:
 	@echo "--> Building probe (in karlkfi/probe-builder:${BUILDER_VERSION})"
 	@docker run -v "$(shell pwd):/go/src/github.com/karlkfi/probe" karlkfi/probe-builder:${BUILDER_VERSION}
+
+build-docker-cross:
+	@echo "--> Building probe (in karlkfi/probe-builder:${BUILDER_VERSION}) for all platforms"
+	@docker run -v "$(shell pwd):/go/src/github.com/karlkfi/probe" karlkfi/probe-builder:${BUILDER_VERSION} make restoredeps test build-cross

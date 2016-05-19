@@ -1,4 +1,4 @@
-FROM golang:1.4.2-wheezy
+FROM golang:1.6.2-wheezy
 MAINTAINER Karl Isenberg <karlkfi@yahoo.com>
 
 RUN echo "deb-src http://httpredir.debian.org/debian wheezy main" >> /etc/apt/sources.list && \
@@ -10,7 +10,8 @@ RUN echo "deb-src http://httpredir.debian.org/debian wheezy main" >> /etc/apt/so
     apt-get -y clean
 
 RUN go get github.com/tools/godep
-RUN go get golang.org/x/tools/cmd/vet
+RUN go get github.com/mitchellh/gox
+ENV GO15VENDOREXPERIMENT 0
 
 VOLUME ${GOPATH}/src/github.com/karlkfi/probe
 
