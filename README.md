@@ -96,6 +96,17 @@ If the Go-based resolver is used, there is no built-in DNS caching, which may or
 
 ### Install
 
+#### Pre-compiled Binaries
+
+Find platform-specific download URL to the [latest release](https://github.com/karlkfi/probe/releases/latest).
+
+Linux Example:
+
+```
+curl -sL https://github.com/karlkfi/probe/releases/download/v0.3.0/probe-0.3.0-linux_amd64.tgz | tar xf - -C /usr/local/bin/
+```
+
+
 #### From Source
 
 [Go get](https://golang.org/doc/install) can be used to install the bleeding edge revision (HEAD):
