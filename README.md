@@ -103,7 +103,7 @@ Find platform-specific download URL to the [latest release](https://github.com/k
 Linux Example:
 
 ```
-curl -sL https://github.com/karlkfi/probe/releases/download/v0.3.0/probe-0.3.0-linux_amd64.tgz | tar xf - -C /usr/local/bin/
+curl -sL https://github.com/karlkfi/probe/releases/download/v0.3.0/probe-0.3.0-linux_amd64.tgz | sudo tar zxf - -C /usr/local/bin/
 ```
 
 
