@@ -127,6 +127,7 @@ func makeAttempts(prober Prober, address string, maxAttempts int, retryDelay tim
 	glog.V(2).Infof("Attempt %d Failed: %v", attemptsMade, probeErr)
 
 	for probeErr != nil && (maxAttempts < 0 || maxAttempts > attemptsMade) {
+		glog.V(3).Infof("Sleeping %s", retryDelay)
 		time.Sleep(retryDelay)
 		probeErr = prober.Probe(address)
 		attemptsMade++
