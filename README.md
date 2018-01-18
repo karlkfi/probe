@@ -154,10 +154,10 @@ Build the docker builder (Requires [Docker](https://docs.docker.com/installation
 make builder
 ```
 
-Build binary:
+Package binaries:
 
 ```
-cd pkg/linux_amd64 && tar -zcvf probe-${VERSION}-linux_amd64.tgz probe; cd ../..
+for f in pkg/*; do cd $f && tar -zcvf probe-${VERSION}-$(basename $f).tgz probe; cd ../..; done
 ```
 
 
