@@ -9,31 +9,19 @@ BUILDER_VERSION=$(shell git rev-list -1 HEAD -- "builder" | cut -c1-7)${BUILDER_
 
 default: all
 
-all: restoredeps test build
-
-restoredeps:
-	@echo "--> Restoring build dependencies"
-	@godep restore
-
-savedeps:
-	@echo "--> Saving build dependencies"
-	@godep save
-
-updatedeps:
-	@echo "--> Updating build dependencies"
-	@godep update ${ARGS}
+all: test build
 
 format:
 	@echo "--> Running go fmt"
-	@godep go fmt ./...
+	@go fmt ./...
 
 vet:
 	@echo "--> Running go vet"
-	@godep go vet ./...
+	@go vet ./...
 
 build:
 	@echo "--> Building probe"
-	@godep go build -o probe
+	@go build -o probe
 
 build-cross:
 	@echo "--> Building probe"
@@ -43,20 +31,20 @@ test_banner:
 	@echo "--> Testing probe"
 
 test: test_banner
-	@godep go test ./...
+	@go test ./...
 
 test.v: test_banner
-	@godep go test -test.v ./...
+	@go test -test.v ./...
 
 testrace:
-	@godep go test -race ./...
+	@go test -race ./...
 
 clean:
 	@echo "--> Cleaning probe"
-	@godep go clean
+	@go clean
 
 env:
-	@godep go env
+	@go env
 
 .PHONY: builder
 builder:
@@ -69,4 +57,4 @@ build-docker:
 
 build-docker-cross:
 	@echo "--> Building probe (in karlkfi/probe-builder:${BUILDER_VERSION}) for all platforms"
-	@docker run -v "$(shell pwd):/go/src/github.com/karlkfi/probe" karlkfi/probe-builder:${BUILDER_VERSION} make restoredeps test build-cross
+	@docker run -v "$(shell pwd):/go/src/github.com/karlkfi/probe" karlkfi/probe-builder:${BUILDER_VERSION} make test build-cross
